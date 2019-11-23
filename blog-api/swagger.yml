@@ -1,0 +1,93 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Blog API
+servers:
+  - url: http://%host%/
+paths:
+  /post/{id}:
+    get:
+      description: Returns data for a single blog post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+            format: int32
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+        404:
+          description: Post not found
+        500:
+          description: Internal server error
+  /posts:
+    get:
+      description: Returns all blog posts
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BlogPost'
+        404:
+          description: Error returning posts
+        500:
+          description: Internal server error
+  /create_post:
+    post:
+      description: Creates a new blog post entry in the database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogPost'
+      responses:
+        202:
+          description: Post created
+        400:
+          description: Wrong input
+        500:
+          description: Internal server error
+
+components:
+  schemas:
+    BlogPost:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        author:
+          type: string
+        title:
+          type: string
+        text:
+          type: string
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        author:
+          type: string
+        text:
+          type: string
