@@ -1,7 +1,7 @@
 # Game Review Platform
 A simple blog platform for users to post game reviews on (interview assignment for EA)
 
-##MVP
+## MVP
 - Only the back-end API portion will be available (as per the requirements), with the following MVP features:
     1. Blog post loading
         - single post
@@ -10,10 +10,10 @@ A simple blog platform for users to post game reviews on (interview assignment f
     3. Comment creation
     4. Post editing (if time)
 
-##Assumptions
+## Assumptions
 - Field data sent from the front end will be in JSON format
 
-##Future
+## Future
 - Implement a front end UI
 - Implement text formatting and customization when creating blog posts
 - Implement the ability to add images to blog posts
