@@ -28,7 +28,16 @@ paths:
           description: Internal server error
   /posts:
     get:
-      description: Returns all blog posts
+      description: Returns an array of blog posts
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: number
+        - name: fetch_next
+          in: query
+          schema:
+            type: number
       responses:
         200:
           description: OK
