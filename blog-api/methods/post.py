@@ -12,12 +12,10 @@ bp = Blueprint('blog_posts')
 def get_post(request: Request, id: int) -> HTTPResponse:
     services = request.app.services
     post_storage = services.post_storage
-    body = request.json
 
     # For current testing/debugging purposes:
-    # print('blog id TEST ---->', id)
-    # post_content = post_storage.get_post(id)
-    # logging.info('should return nothing ---->', post_content)
-    # print('should return nothing ---->', post_content)
+    post_content = post_storage.get_post(id)
+    print('should return post ---->', post_content)
+    print('test post_content processing ----->', post_content[1])
 
     return HTTPResponse(status=200)

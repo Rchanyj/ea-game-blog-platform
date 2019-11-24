@@ -1,8 +1,12 @@
 from sanic import Blueprint
 import sqlite3
-from sqlite3 import Error
+import time
 
 import logging
+
+# FOR DEMO ONLY:
+from faker import Faker
+from random import randint
 
 
 bp = Blueprint(__name__)
@@ -47,17 +51,17 @@ create_comments_table = '''CREATE TABLE IF NOT EXISTS comments (
 # Queries:
 sql_fetch_post = '''select *
                         from posts
-                        where id = %s'''
+                        where id = ?'''
 
 sql_fetch_posts = '''select *
                         from posts
-                        offset %s rows
-                        fetch next %s rows only
+                        offset ? rows
+                        fetch next ? rows only
                         order by created_time desc'''
 
 sql_fetch_comments = '''select *
                             from comments
-                            where post_id = %s
+                            where post_id = ?
                             order by created_time desc'''
 
 
@@ -70,18 +74,22 @@ class PostStorage:
             cursor = self.conn.cursor()
             cursor.execute(create_posts_table)
             cursor.execute(create_comments_table)
-        except Error:
-            raise Exception('Failed to set up in-memory database.')
+        except Exception:
+            raise Exception('Failed to set up in-memory database')
+
+        # Seed demo entries (DEMO PURPOSES ONLY):
+        err = self.seed_demo_db()
+        if err:
+            raise Exception('Failed to seed demo database')
 
     def get_post(self, post_id):
         logging.info('Fetching post...')
 
         try:
-            conn = self.conn
-            cursor = conn.cursor()
-            cursor.execute(sql_fetch_post, post_id)
+            cursor = self.conn.cursor()
+            cursor.execute(sql_fetch_post, (post_id,))
 
-            post = cursor.fetchall()
+            post = cursor.fetchone()
 
             return post
 
@@ -93,8 +101,7 @@ class PostStorage:
         logging.info('Fetching posts...')
 
         try:
-            conn = self.conn
-            cursor = conn.cursor()
+            cursor = self.conn.cursor()
             cursor.execute(sql_fetch_posts, (offset, fetch_next))
 
             posts = cursor.fetchall()
@@ -109,9 +116,8 @@ class PostStorage:
         logging.info('Fetching comments...')
 
         try:
-            conn = self.conn
-            cursor = conn.cursor()
-            cursor.execute(sql_fetch_comments, (post_id))
+            cursor = self.conn.cursor()
+            cursor.execute(sql_fetch_comments, (post_id,))
 
             comments = cursor.fetchall()
 
@@ -124,3 +130,55 @@ class PostStorage:
     def close(self):
         if self.conn:
             self.conn.close()
+
+    # FOR DEMO ONLY:
+    def seed_demo_db(self):
+        logging.info('Initializing demo db seed...')
+
+        cursor = self.conn.cursor()
+
+        fake = Faker()
+        fake_posts = []
+
+        sql_seed_posts = '''insert into posts(id, author, title, text, created_time)
+                            values(?, ?, ?, ?, ?)'''
+        sql_seed_comments = '''insert into comments(id, post_id, author, text, created_time)
+                            values(?, ?, ?, ?, ?)'''
+
+        # *For demo purposes, ids will be random integers for simplicity.
+
+        for i in range(50):
+            fake_post_id = i + 100000
+            fake_post_author = fake.name()
+            fake_post_title = fake.sentence()
+            fake_post_text = fake.text()
+            post_created_time = time.time()
+
+            try:
+                cursor.execute(sql_seed_posts,
+                               (fake_post_id,
+                                fake_post_author,
+                                fake_post_title,
+                                fake_post_text,
+                                post_created_time))
+            except Exception:
+                raise Exception('seeding demo posts failed')
+
+        for j in range(150):
+            fake_comment_id = j + 1000
+            related_post_id = randint(100000, 100050)
+            fake_comment_author = fake.name()
+            fake_comment_text = fake.text()
+            comment_created_time = time.time()
+
+            try:
+                cursor.execute(sql_seed_comments,
+                               (fake_comment_id,
+                                related_post_id,
+                                fake_comment_author,
+                                fake_comment_text,
+                                comment_created_time))
+            except Exception:
+                raise Exception('seeding demo comments failed')
+
+        logging.info('Demo db seeding complete.')
