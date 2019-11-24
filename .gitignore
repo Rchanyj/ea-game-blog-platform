@@ -1,4 +1,4 @@
 .idea
 .DS_Store
 venv
-blog-api/__pycache__/
+*__pycache__

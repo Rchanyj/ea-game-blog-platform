@@ -9,15 +9,16 @@ bp = Blueprint(__name__)
 
 
 @bp.listener('before_server_start')
-def attach(app):
+def attach(app, _):
     logging.info('Initializing post storage...')
 
     post_storage = PostStorage()
     post_storage.init()
     app.services.post_storage = post_storage
 
+
 @bp.listener('after_server_stop')
-def detach(app):
+def detach(app, _):
     logging.info('Closing post storage...')
 
     post_storage = app.services.post_storage
@@ -59,6 +60,7 @@ sql_fetch_comments = '''select *
                             where post_id = %s
                             order by created_time desc'''
 
+
 class PostStorage:
 
     def __init__(self):
@@ -74,31 +76,49 @@ class PostStorage:
             raise Exception('Failed to set up in-memory database.')
 
     def get_post(self, post_id):
-        conn = self.conn
-        cursor = conn.cursor()
-        cursor.execute(sql_fetch_post, (post_id))
+        logging.info('Fetching post...')
 
-        post = cursor.fetchall()
+        try:
+            conn = self.conn
+            cursor = conn.cursor()
+            cursor.execute(sql_fetch_post, (post_id))
 
-        return post
+            post = cursor.fetchall()
+
+            return post
+        except Exception:
+            logging.exception('get_post ---> error fetching post')
+            return {}
 
     def get_posts(self, offset, fetch_next):
-        conn = self.conn
-        cursor = conn.cursor()
-        cursor.execute(sql_fetch_posts, (offset, fetch_next))
+        logging.info('Fetching posts...')
 
-        posts = cursor.fetchall()
+        try:
+            conn = self.conn
+            cursor = conn.cursor()
+            cursor.execute(sql_fetch_posts, (offset, fetch_next))
 
-        return posts
+            posts = cursor.fetchall()
+
+            return posts
+        except Exception:
+            logging.exception('get_posts ---> error fetching posts')
+            return []
 
     def get_comments(self, post_id):
-        conn = self.conn
-        cursor = conn.cursor()
-        cursor.execute(sql_fetch_comments, (post_id))
+        logging.info('Fetching comments...')
 
-        comments = cursor.fetchall()
+        try:
+            conn = self.conn
+            cursor = conn.cursor()
+            cursor.execute(sql_fetch_comments, (post_id))
 
-        return comments
+            comments = cursor.fetchall()
+
+            return comments
+        except Exception:
+            logging.exception('get_comments ---> error fetching comments')
+            return []
 
     def close(self):
         if self.conn:
