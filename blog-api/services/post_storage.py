@@ -63,10 +63,8 @@ sql_fetch_comments = '''select *
 
 class PostStorage:
 
-    def __init__(self):
-        self.conn = None
-
     def init(self):
+        self.conn = None
         try:
             self.conn = sqlite3.connect(':memory:')
             cursor = self.conn.cursor()
@@ -86,6 +84,7 @@ class PostStorage:
             post = cursor.fetchall()
 
             return post
+
         except Exception:
             logging.exception('get_post ---> error fetching post')
             return {}
@@ -101,6 +100,7 @@ class PostStorage:
             posts = cursor.fetchall()
 
             return posts
+
         except Exception:
             logging.exception('get_posts ---> error fetching posts')
             return []
@@ -116,6 +116,7 @@ class PostStorage:
             comments = cursor.fetchall()
 
             return comments
+
         except Exception:
             logging.exception('get_comments ---> error fetching comments')
             return []
