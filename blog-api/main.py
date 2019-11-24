@@ -18,7 +18,7 @@ def main():
 
     # Methods
     app.blueprint(status.bp)
-    # app.blueprint(post.bp)
+    #app.blueprint(post.bp)
 
     app.run(host='0.0.0.0', port=config.LISTEN_PORT)
 

@@ -79,7 +79,7 @@ class PostStorage:
         try:
             conn = self.conn
             cursor = conn.cursor()
-            cursor.execute(sql_fetch_post, (post_id))
+            cursor.execute(sql_fetch_post, post_id)
 
             post = cursor.fetchall()
 

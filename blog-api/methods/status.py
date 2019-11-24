@@ -16,6 +16,6 @@ def status(_request: Request) -> HTTPResponse:
 
 @bp.get('/swagger')
 def definition(_request: Request) -> HTTPResponse:
-    host = config.SWAGGER_HOST or f'http://localhost:{config.LISTEN_PORT}'
+    host = config.SWAGGER_HOST or f'localhost:{config.LISTEN_PORT}'
     with open('./swagger.yml') as s:
         return HTTPResponse(body=s.read().replace('%host%', host))
