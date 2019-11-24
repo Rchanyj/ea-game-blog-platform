@@ -1,6 +1,7 @@
 from sanic import Sanic
 
 import config
+import middleware
 import services
 from methods import status, post
 
@@ -9,6 +10,7 @@ def main():
     app = Sanic('blog-api')
 
     # Infrastructure
+    app.blueprint(middleware.bp)
     app.blueprint(services.bp)
 
     # Services
