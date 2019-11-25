@@ -6,7 +6,7 @@ from services.post_storage import PostStorage
 def test_get_post():
     post_storage = PostStorage()
 
-    # Using existing demo logic in PostStorage to seed the testdb; for non-demo purposes, will move
+    # Using existing demo logic in PostStorage to seed the testdb; for post-MVP, will move
     # demo seed logic into tests.
     post_storage.init()
 
