@@ -1,0 +1,5 @@
+istioEnvironments:
+  - alpha
+istioHosts:
+  # Not set up:
+#  alpha:

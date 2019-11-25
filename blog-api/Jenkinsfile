@@ -1,0 +1,22 @@
+#!groovy
+@Library("jenkins-kubernetes-pipeline@2.x") _
+
+kubernetesPipeline {
+    environments = [
+        'alpha': [
+            'namespace': 'blog-api',
+            'googleProject': '',
+            'googleCluster': 'nlp-us-west1',
+            'googleRegion': 'us-west1',
+            'helmValueFilePaths': [
+                './blog-api/helm/values.yaml',
+            ],
+        ]
+    ]
+    dockerRegistry = ''
+    imageName = 'blog-api'
+    dockerfilePath = './blog-api/Dockerfile'
+    helmChartPath = './blog-api/helm'
+    testServiceName = 'test'
+    appName = 'blog-api'
+}

@@ -1,0 +1,26 @@
+version: '3.6'
+
+
+services:
+    app:
+        build: .
+        env_file: blog-api/envs/tests.env
+        ports:
+            - "8000"
+        healthcheck:
+            test: curl --silent --fail localhost:8000/status
+            interval: 10s
+            timeout: 10s
+            retries: 3
+        volumes:
+            - '.:/workspace'
+
+    test:
+        build:
+            context: .
+            args:
+                DEV_BUILD: --dev
+        env_file: blog-api/envs/tests.env
+        volumes:
+            - '.:/workspace'
+        command: pytest
