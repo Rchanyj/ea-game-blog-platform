@@ -20,7 +20,7 @@ services:
             context: .
             args:
                 DEV_BUILD: --dev
-        env_file: blog-api/tests.env
+        env_file: blog-api/envs/tests.env
         volumes:
             - '.:/workspace'
         command: pytest
