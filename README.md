@@ -8,6 +8,8 @@ A simple blog platform for users to post game reviews on (interview assignment f
         - list of posts
     2. Blog post creation
     3. Comment creation
+    
+## Deployment setup
 
 ## Assumptions
 - Field data sent from the front end will be in JSON format
