@@ -62,7 +62,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BlogPost'
+              $ref: '#/components/schemas/BlogPostSubmission'
       responses:
         202:
           description: Post created
@@ -78,7 +78,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Comment'
+              $ref: '#/components/schemas/CommentSubmission'
       responses:
         202:
           description: Comment created
@@ -109,10 +109,40 @@ components:
           items:
             $ref: '#/components/schemas/Comment'
 
+    BlogPostSubmission:
+      type: object
+      properties:
+        author:
+          type: string
+        title:
+          type: string
+        text:
+          type: string
+        created_time:
+          type: integer
+          format: timestamp
+
     Comment:
       type: object
       properties:
         id:
+          type: integer
+          format: int32
+        post_id:
+          type: integer
+          format: int32
+        author:
+          type: string
+        text:
+          type: string
+        created_time:
+          type: integer
+          format: timestamp
+
+    CommentSubmission:
+      type: object
+      properties:
+        post_id:
           type: integer
           format: int32
         author:

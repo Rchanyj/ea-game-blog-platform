@@ -11,6 +11,7 @@ A simple blog platform for users to post game reviews on (interview assignment f
 
 ## Assumptions
 - Field data sent from the front end will be in JSON format
+- For simplicity, all ids for the MVP will be integers of specific digit lengths. Features like encryption and the use of UUIDs will be in the Future Wish List :)
 
 ## Future wish list:
 - Implement a front end UI

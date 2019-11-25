@@ -1,3 +1,5 @@
+import time
+
 from services.post_storage import PostStorage
 
 
@@ -38,5 +40,51 @@ def test_get_comments():
 
     assert len(comments_data) == 3
 
-# TODO: add tests for create comment, create post (then test linking comments to posts)
 
+def test_save_post():
+    post_storage = PostStorage()
+    post_storage.init()
+
+    post_content = {
+        'id': 123456,
+        'author': 'noobmaster64',
+        'title': 'SW: Fallen Order is Awesome',
+        'text': 'This game is awesome yeet',
+        'created_time': time.time()
+    }
+
+    post_storage.save_post(post_content)
+
+    saved_post = post_storage.get_post(123456)
+
+    assert saved_post == (post_content.get('id'),
+                          post_content.get('author'),
+                          post_content.get('title'),
+                          post_content.get('text'),
+                          post_content.get('created_time'))
+
+
+def test_save_comment():
+    post_storage = PostStorage()
+    post_storage.init()
+
+    comment_content = {
+        'id': 12345,
+        'post_id': 123456,
+        'author': 'masternoob46',
+        'text': 'Totally not commenting on my own post with an alt name...',
+        'created_time': time.time()
+    }
+
+    post_storage.save_comment(comment_content)
+    post_id = 123456
+
+    saved_comment = post_storage.get_comments(post_id)
+
+    assert saved_comment[0] == (comment_content.get('id'),
+                                comment_content.get('post_id'),
+                                comment_content.get('author'),
+                                comment_content.get('text'),
+                                comment_content.get('created_time'))
+
+# Future wish list: exception handling testing...

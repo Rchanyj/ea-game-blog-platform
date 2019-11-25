@@ -63,6 +63,12 @@ sql_fetch_comments = '''select *
                             where post_id = ?
                             order by created_time desc'''
 
+sql_insert_post = '''insert into posts(id, author, title, text, created_time)
+                            values(?, ?, ?, ?, ?)'''
+
+sql_insert_comment = '''insert into comments(id, post_id, author, text, created_time)
+                    values(?, ?, ?, ?, ?)'''
+
 
 class PostStorage:
 
@@ -111,6 +117,20 @@ class PostStorage:
             logging.exception('get_posts ---> error fetching posts')
             return []
 
+    def save_post(self, post_content):
+        logging.info('Saving post...')
+
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute(sql_insert_post,
+                           (post_content.get('id'),
+                            post_content.get('author'),
+                            post_content.get('title'),
+                            post_content.get('text'),
+                            post_content.get('created_time')))
+        except Exception:
+            raise Exception('Failed to save post')
+
     def get_comments(self, post_id):
         logging.info('Fetching comments...')
 
@@ -126,6 +146,20 @@ class PostStorage:
             logging.exception('get_comments ---> error fetching comments')
             return []
 
+    def save_comment(self, comment_content):
+        logging.info('Saving comment...')
+
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute(sql_insert_comment,
+                           (comment_content.get('id'),
+                            comment_content.get('post_id'),
+                            comment_content.get('author'),
+                            comment_content.get('text'),
+                            comment_content.get('created_time')))
+        except Exception:
+            raise Exception('Failed to save comment')
+
     def close(self):
         if self.conn:
             self.conn.close()
@@ -138,11 +172,6 @@ class PostStorage:
 
         fake = Faker()
 
-        sql_seed_posts = '''insert into posts(id, author, title, text, created_time)
-                            values(?, ?, ?, ?, ?)'''
-        sql_seed_comments = '''insert into comments(id, post_id, author, text, created_time)
-                            values(?, ?, ?, ?, ?)'''
-
         # *For demo purposes, ids will be random integers for simplicity.
 
         for i in range(50):
@@ -153,14 +182,14 @@ class PostStorage:
             post_created_time = time.time()
 
             try:
-                cursor.execute(sql_seed_posts,
+                cursor.execute(sql_insert_post,
                                (fake_post_id,
                                 fake_post_author,
                                 fake_post_title,
                                 fake_post_text,
                                 post_created_time))
             except Exception:
-                raise Exception('seeding demo posts failed')
+                raise Exception('Seeding demo posts failed')
 
         for j in range(147):
             fake_comment_id = j + 1000
@@ -176,13 +205,13 @@ class PostStorage:
             comment_created_time = time.time()
 
             try:
-                cursor.execute(sql_seed_comments,
+                cursor.execute(sql_insert_comment,
                                (fake_comment_id,
                                 related_post_id,
                                 fake_comment_author,
                                 fake_comment_text,
                                 comment_created_time))
             except Exception:
-                raise Exception('seeding demo comments failed')
+                raise Exception('Seeding demo comments failed')
 
         logging.info('Demo db seeding complete.')
