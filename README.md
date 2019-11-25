@@ -14,6 +14,8 @@ A simple blog platform for users to post game reviews on (interview assignment f
 - For simplicity, all ids for the MVP will be integers of specific digit lengths. Features like encryption and the use of UUIDs will be in the Future Wish List :)
 
 ## Future wish list:
+- Improve existing error handling and implement error handling for more edge cases (e.g. missing/erroneous request params)
+- Improve tests (test error handling, set up TestContext suite for requests, etc.)
 - Implement a front end UI
 - Implement post editing
 - Implement text formatting and customization when creating blog posts
