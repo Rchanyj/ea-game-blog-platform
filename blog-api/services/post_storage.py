@@ -55,9 +55,8 @@ sql_fetch_post = '''select *
 
 sql_fetch_posts = '''select *
                         from posts
-                        offset ? rows
-                        fetch next ? rows only
-                        order by created_time desc'''
+                        order by created_time desc
+                        limit ? offset ?'''
 
 sql_fetch_comments = '''select *
                             from comments
@@ -97,12 +96,12 @@ class PostStorage:
             logging.exception('get_post ---> error fetching post')
             return {}
 
-    def get_posts(self, offset, fetch_next):
+    def get_posts(self, limit, offset):
         logging.info('Fetching posts...')
 
         try:
             cursor = self.conn.cursor()
-            cursor.execute(sql_fetch_posts, (offset, fetch_next))
+            cursor.execute(sql_fetch_posts, (limit, offset))
 
             posts = cursor.fetchall()
 
@@ -138,7 +137,6 @@ class PostStorage:
         cursor = self.conn.cursor()
 
         fake = Faker()
-        fake_posts = []
 
         sql_seed_posts = '''insert into posts(id, author, title, text, created_time)
                             values(?, ?, ?, ?, ?)'''
@@ -164,9 +162,15 @@ class PostStorage:
             except Exception:
                 raise Exception('seeding demo posts failed')
 
-        for j in range(150):
+        for j in range(147):
             fake_comment_id = j + 1000
-            related_post_id = randint(100000, 100050)
+
+            # Create 3 comments for the first post for testing purposes:
+            if j < 3:
+                related_post_id = 100000
+            else:
+                related_post_id = randint(100001, 100050)
+
             fake_comment_author = fake.name()
             fake_comment_text = fake.text()
             comment_created_time = time.time()

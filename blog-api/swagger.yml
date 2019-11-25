@@ -30,11 +30,11 @@ paths:
     get:
       description: Returns an array of blog posts
       parameters:
-        - name: offset
+        - name: limit
           in: query
           schema:
             type: number
-        - name: fetch_next
+        - name: offset
           in: query
           schema:
             type: number
@@ -70,6 +70,22 @@ paths:
           description: Wrong input
         500:
           description: Internal server error
+  /create_comment:
+    post:
+      description: Creates a new comment on a post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        202:
+          description: Comment created
+        400:
+          description: Wrong input
+        500:
+          description: Internal server error
 
 components:
   schemas:
@@ -85,6 +101,9 @@ components:
           type: string
         text:
           type: string
+        created_time:
+          type: integer
+          format: timestamp
         comments:
           type: array
           items:
@@ -100,3 +119,6 @@ components:
           type: string
         text:
           type: string
+        created_time:
+          type: integer
+          format: timestamp

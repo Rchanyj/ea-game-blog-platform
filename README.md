@@ -8,13 +8,13 @@ A simple blog platform for users to post game reviews on (interview assignment f
         - list of posts
     2. Blog post creation
     3. Comment creation
-    4. Post editing (if time)
 
 ## Assumptions
 - Field data sent from the front end will be in JSON format
 
-## Future
+## Future wish list:
 - Implement a front end UI
+- Implement post editing
 - Implement text formatting and customization when creating blog posts
 - Implement the ability to add images to blog posts
 - Implement user registration

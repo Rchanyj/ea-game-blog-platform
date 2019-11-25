@@ -19,7 +19,7 @@ def main():
 
     # Methods
     app.blueprint(status.bp)
-    app.blueprint(post.bp)
+    #app.blueprint(post.bp)
 
     # Set root logging level
     logging.getLogger().setLevel(logging.INFO)
