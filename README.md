@@ -9,9 +9,6 @@ A simple blog platform for users to post game reviews and comments on. _*TekSyst
     2. Blog post creation
     3. Comment creation
     
-## Note on deployment setup:
-- Sadly, I realized too late that my personal mac I'm using this weekend hasn't been set up to use the stable versions of Docker. I've set up the files (for hypothetical deployment on Jenkins to Kubernetes on Google Cloud) as much as I could, but I have not been able to test them or complete them since I have not been able to run them.  
-
 ## Assumptions
 - Field data sent from the front end will be in JSON format
 - Data taken by end points are assumed to be in the form sent by the front end
@@ -25,6 +22,7 @@ A simple blog platform for users to post game reviews and comments on. _*TekSyst
 5. Since there is no front end currently available, the API's functionalities can be tested in GUI form on SwaggerUI: http://petstore.swagger.io/ (currently using `http` scheme for MVP). Use `http://{localhost}:8000/swagger` to get the UI. 
 
 ## Future wish list:
+- Deploy service
 - Improve existing error handling and implement error handling for more edge cases (e.g. missing/erroneous request params)
 - Improve tests (test error handling, set up TestContext suite for requests, etc.)
 - Implement a front end UI
